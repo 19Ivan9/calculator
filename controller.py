@@ -24,11 +24,34 @@ class Controller:
         self.ui.pushButton_18.clicked.connect(self.press_button('('))
         self.ui.pushButton_19.clicked.connect(self.press_button(')'))
         self.ui.pushButton_20.clicked.connect(self.press_button('%'))
+        self.ui.pushButton_21.clicked.connect(self.press_button('.'))
+        self.display_text = '0'
         window.show()
 
+    def intro(self):
+        text = self.ui.lineEdit.setText('0')
+        return text
+
+    def err_control(self):
+        if self.ui.lineEdit.text() == 'ERROR':
+            self.clear_console()
+
+    def zero_control(self):
+        if self.ui.lineEdit.text() == self.display_text:
+            self.clear_console()
+
+    def clear_console(self):
+        self.ui.lineEdit.clear()
+
+
     def press_button(self, symbol):
+        self.display_text = self.intro()
         def click(*args, **kwargs):
+            self.err_control()
+            self.zero_control()
             text = self.ui.lineEdit.text() + symbol
+            if text == '.' and self.ui.lineEdit.text() == '':
+                text = '0.'
             self.ui.lineEdit.setText(text)
         return click
 
@@ -40,10 +63,6 @@ class Controller:
         except SyntaxError:
             result = 'ERROR'
         self.ui.lineEdit.setText(result)
-
-
-    def clear_console(self):
-        self.ui.lineEdit.clear()
 
     def calc_exit(self):
         exit()
